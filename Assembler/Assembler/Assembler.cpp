@@ -78,12 +78,14 @@ void Assembler::PassII()
 		// Read the next line from the source file.
 		string buff;
 		if (!m_facc.GetNextLine(buff)) {
-			string emsg = "Error: Missing an end statement";
-			Errors::RecordError(emsg);
 
-			// If there are no more lines, we are missing an end statement.
-			// We will let this error be reported by Pass II.
-			return;
+			if (m_inst.GetOpCode() == "END"){	return; } // If the last line in source file was END
+			
+			else {
+				string emsg = "Error: Missing an end statement";
+				Errors::RecordError(emsg);
+				return;
+			}	
 		}
 
 		// Parse the line and get the instruction type.
@@ -165,6 +167,7 @@ void Assembler::PassII()
 
 void Assembler::RunEmulator() { 
 	
+	Errors::DisplayErrors();
 	cout << "Results from emulating program: \n" << endl;
 
 	m_emul.runProgram();

@@ -3,6 +3,7 @@
 //
 #include "stdafx.h"
 #include "Instruction.h"
+#include "Errors.h"
 
 
 
@@ -123,4 +124,5 @@ Instruction::SetNumOpCode() {
 	if (m_OpCode == "BM") { m_NumOpCode = BM; }
 	if (m_OpCode == "BZ") { m_NumOpCode = BZ; }
 	if (m_OpCode == "BP") { m_NumOpCode = BP; }
+	
 }

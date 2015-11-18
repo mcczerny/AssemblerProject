@@ -6,21 +6,31 @@
 #include "Errors.h"
 
 	// Initializes error reports.
-void InitErrorReporting();
 
+vector <string> Errors::m_ErrorMsgs;
+
+void Errors::InitErrorReporting() {
+	cout << "Initializes Error reports " << endl;
+}
 
 // Records an error message.
 void Errors::RecordError(string &a_emsg)
 {
-	m_ErrorMsgs.push_back(a_emsg);
+	Errors::m_ErrorMsgs.push_back(a_emsg);
+
 }
 
 // Displays the collected error message.
-//void Errors::DisplayErrors() {
-//	
-//	for (int i = 0; i < m_ErrorMsgs.size(); i++)
-//	{
-//		cout << m_ErrorMsgs[i];
-//	}
-//}
+void Errors::DisplayErrors() {
+
+	if (!m_ErrorMsgs.empty()) {
+		for (int i = 0; i < m_ErrorMsgs.size(); i++)
+		{
+			cout << m_ErrorMsgs[i] << endl;
+		}
+	}
+	else {
+		return;
+	}
+}
 

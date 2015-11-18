@@ -63,9 +63,6 @@
     <ClCompile Include="Instruction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Emulator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Errors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

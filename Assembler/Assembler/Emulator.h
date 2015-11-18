@@ -45,45 +45,46 @@ public:
 					address = stoi(strContents.substr(2, 5));
 				}
 				
-				switch (opCode) {
-				case 1:
-					ACC = ACC + address;
-					break;
-				case 2:
-					ACC = ACC - address;
-					break;
-				case 3: 
-					ACC = ACC * address;
-					break;
-				case 4: 
-					ACC = ACC / address;
-					break;
-				case 5: 
-					ACC = address;
-					break;
-				case 6: 
-					address = ACC;
-					break;
-				case 7: 
-					m_memory[i] = m_memory[address];
-					break;
-				case 8: 
-					cout << address;
-					break;
-				case 9:
-					i = address;
-					break;
-				case 10:
-					if (ACC < 0) { i = address; }
-					break;
-				case 11:
-					if (ACC == 0) { i = address; }
-					break;
-				case 12: 
-					if (ACC > 0) { i = address; }
-					break;
-				case 13: exit(0);
-				}
+				//switch (opCode) {
+				//case 1:
+				//	ACC = ACC + address; // ACC <- c(ACC) + c(ADDR)
+				//	break;
+				//case 2:
+				//	ACC = ACC - address; // ACC <- c(ACC) - c(ADDR)
+				//	break;
+				//case 3: 
+				//	ACC = ACC * address; // ACC <- c(ACC) * c(ADDR)
+				//	break;
+				//case 4: 
+				//	ACC = ACC / address; // ACC <- c(ACC) / c(ADDR)
+				//	break;
+				//case 5: 
+				//	ACC = address; // ACC <- c(ADDR)
+				//	break;
+				//case 6: 
+				//	address = ACC; // ADDR <- c(ACC)
+				//	break;
+				//case 7: 
+				//	m_memory[i] = m_memory[address]; // A line is read and its first 6 digits 
+				//	break;							 // are placed in the specified address
+				//case 8: 
+				//	cout << address; // c(ADDR) is displayed
+				//	break;
+				//case 9:
+				//	i = address; // go to ADDR for next instruction
+				//	break;
+				//case 10:
+				//	if (ACC < 0) { i = address; } // go to ADDR if c(ACC) < 0
+				//	break;
+				//case 11:
+				//	if (ACC == 0) { i = address; } // go to ADDR if c(ACC) = 0
+				//	break;
+				//case 12: 
+				//	if (ACC > 0) { i = address; } // go to ADDR if c(ACC) > 0
+				//	break;
+				//case 13: exit(0); // terminate execution
+				//	break;
+				//}
 				
 			}
 		return true;
