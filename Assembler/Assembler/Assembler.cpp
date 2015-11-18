@@ -78,8 +78,8 @@ void Assembler::PassII()
 		// Read the next line from the source file.
 		string buff;
 		if (!m_facc.GetNextLine(buff)) {
-			string errorMissingEnd = "Error: Missing an end statement";
-			//Errors::RecordError(errorMissingEnd);
+			string emsg = "Error: Missing an end statement";
+			Errors::RecordError(emsg);
 
 			// If there are no more lines, we are missing an end statement.
 			// We will let this error be reported by Pass II.

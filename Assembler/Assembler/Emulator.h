@@ -22,7 +22,7 @@ public:
 	// Runs the VC3600 program recorded in memory.
 	bool runProgram() {
 		
-		int accumulator;
+		int ACC = 0;
 		for (int i = 0; i < MEMSZ; i++)
 			if (m_memory[i] != 0)
 			{
@@ -30,18 +30,59 @@ public:
 				ostringstream intToString;
 				intToString << m_memory[i];
 				strContents = intToString.str();
-
+				int opCode;
+				int address;
 				if (strContents.length() == 5){
 
 
-					int opCode = stoi(strContents.substr(0, 1));
-					int address = stoi(strContents.substr(1, 5));
+					opCode = stoi(strContents.substr(0, 1));
+					address = stoi(strContents.substr(1, 5));
 
 				}
 				if (strContents.length() == 6) {
 
-					int opCode = stoi(strContents.substr(0, 2));
-					int address = stoi(strContents.substr(2, 5));
+					opCode = stoi(strContents.substr(0, 2));
+					address = stoi(strContents.substr(2, 5));
+				}
+				
+				switch (opCode) {
+				case 1:
+					ACC = ACC + address;
+					break;
+				case 2:
+					ACC = ACC - address;
+					break;
+				case 3: 
+					ACC = ACC * address;
+					break;
+				case 4: 
+					ACC = ACC / address;
+					break;
+				case 5: 
+					ACC = address;
+					break;
+				case 6: 
+					address = ACC;
+					break;
+				case 7: 
+					m_memory[i] = m_memory[address];
+					break;
+				case 8: 
+					cout << address;
+					break;
+				case 9:
+					i = address;
+					break;
+				case 10:
+					if (ACC < 0) { i = address; }
+					break;
+				case 11:
+					if (ACC == 0) { i = address; }
+					break;
+				case 12: 
+					if (ACC > 0) { i = address; }
+					break;
+				case 13: exit(0);
 				}
 				
 			}
