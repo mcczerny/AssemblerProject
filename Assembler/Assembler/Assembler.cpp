@@ -25,12 +25,7 @@ void Assembler::PassI()
 
 		// Read the next line from the source file.
 		string buff;
-		if (!m_facc.GetNextLine(buff)) {
-
-			// If there are no more lines, we are missing an end statement.
-			// We will let this error be reported by Pass II.
-			return;
-		}
+		if (!m_facc.GetNextLine(buff)) { return; }
 		// Parse the line and get the instruction type.
 		Instruction::InstructionType st = m_inst.ParseInstruction(buff);
 
@@ -68,21 +63,23 @@ void Assembler::DisplaySymbolTable()
 void Assembler::PassII()
 {
 	int loc = 0;        // Tracks the location of the instructions to be generated.
-	m_facc.rewind();
+	m_facc.rewind();	// Goes baack to beginning of file
+	Errors::InitErrorReporting(); // Clears any errors from PassI
+
 	cout << "\nTranslation of Program:\n" << endl;
 	cout << setw(12) << left << "Location" << setw(12) << left << "Contents" << setw(12) << left << "Original Statement" << endl;
 
-						// Successively process each line of source code.
+	// Successively process each line of source code.
 	for (; ; ) {
 
 		// Read the next line from the source file.
 		string buff;
 		if (!m_facc.GetNextLine(buff)) {
 
-			if (m_inst.GetOpCode() == "END"){	return; } // If the last line in source file was END
+			if (m_inst.GetOpCode() == "END"){ return; } // If the last line in source file was END
 			
-			else {
-				string emsg = "Error: Missing an end statement";
+			else {	// Missing END at end of file
+				string emsg = "Error: End has not been called at end of file";
 				Errors::RecordError(emsg);
 				return;
 			}	
@@ -91,10 +88,15 @@ void Assembler::PassII()
 		// Parse the line and get the instruction type.
 		Instruction::InstructionType st = m_inst.ParseInstruction(buff);
 		
-		// If this is an end statement, there is nothing left to do in pass I.
-		// Pass II will determine if the end is the last statement.
 
-		if (st == Instruction::ST_End) { return; }
+		if (st == Instruction::ST_End) { 
+			if (!m_facc.GetNextLine(buff)){ return; } // END called at end of file
+
+			else { // END called before end of file
+				string emsg = "Error: End is not at end of file";
+				Errors::RecordError(emsg);
+			}
+		}
 
 		if (st == Instruction::ST_Comment) { cout << "                        " << m_inst.GetOriginalInstruction() << endl; }
 
@@ -168,8 +170,10 @@ void Assembler::PassII()
 void Assembler::RunEmulator() { 
 	
 	Errors::DisplayErrors();
+
 	cout << "Results from emulating program: \n" << endl;
 
 	m_emul.runProgram();
 
+	cout << "\nEnd of emulation" << endl;
 }

@@ -5,19 +5,20 @@
 #include "stdafx.h"
 #include "Errors.h"
 
-	// Initializes error reports.
-
+// Initializes Vector
 vector <string> Errors::m_ErrorMsgs;
 
+// Initializes Error Report
 void Errors::InitErrorReporting() {
-	cout << "Initializes Error reports " << endl;
+
+	Errors::m_ErrorMsgs.clear();
+
 }
 
 // Records an error message.
 void Errors::RecordError(string &a_emsg)
 {
 	Errors::m_ErrorMsgs.push_back(a_emsg);
-
 }
 
 // Displays the collected error message.
