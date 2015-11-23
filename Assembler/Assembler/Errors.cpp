@@ -12,7 +12,6 @@ vector <string> Errors::m_ErrorMsgs;
 void Errors::InitErrorReporting() {
 
 	Errors::m_ErrorMsgs.clear();
-
 }
 
 // Records an error message.
@@ -30,8 +29,6 @@ void Errors::DisplayErrors() {
 			cout << m_ErrorMsgs[i] << endl;
 		}
 	}
-	else {
-		return;
-	}
+	else { return; } // No errors
 }
 

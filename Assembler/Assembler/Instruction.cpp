@@ -78,8 +78,7 @@ Instruction::ParseInstruction(string &a_buff)
 		transform(words[1].begin(), words[1].end(), words[1].begin(), ::toupper);	// Make OpCode uppercase
 		m_OpCode = words[1];
 
-		// Sets NumOpCode to appropriate number
-		SetNumOpCode();
+		SetNumOpCode(); // Sets NumOpCode to appropriate number
 
 		m_Operand = words[2];
 		if (isdigit(m_Operand[0])) {
@@ -105,7 +104,6 @@ Instruction::LocationNextInstruction(int a_loc)
 		if (m_OpCode == "DC") { return a_loc + 1; }
 		if (m_OpCode == "DS") { return a_loc + m_OperandValue; }
 	}
-
 	if (m_IsNumericOperand == false) { return a_loc + 1; }
 };
 

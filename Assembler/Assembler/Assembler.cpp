@@ -164,6 +164,12 @@ void Assembler::PassII()
 
 		// Compute the location of the next instruction.
 		loc = m_inst.LocationNextInstruction(loc);
+		if (loc > 9999)
+		{
+			string emsg = "Error: Ran out of memory";
+			Errors::RecordError(emsg);
+		}
+
 	}
 }
 

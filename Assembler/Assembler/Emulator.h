@@ -44,6 +44,9 @@ public:
 				}
 				
 				switch (opCode) {
+				default: 
+					return false;
+					break;
 				case 1:
 					ACC = ACC + address; // ACC <- c(ACC) + c(ADDR)
 					break;
@@ -84,9 +87,9 @@ public:
 				case 13: // terminate execution
 					return true;
 					break;
-				}
-				
+				}	
 			}
+		return true;
 	}
 
 private:
