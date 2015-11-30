@@ -81,13 +81,11 @@ void Assembler::PassII()
 			else {	// Missing END at end of file
 				string emsg = "Error: End has not been called at end of file";
 				Errors::RecordError(emsg);
-				return;
 			}	
 		}
 
 		// Parse the line and get the instruction type.
 		Instruction::InstructionType st = m_inst.ParseInstruction(buff);
-		
 
 		if (st == Instruction::ST_End) { 
 			if (!m_facc.GetNextLine(buff)){ return; } // END called at end of file
@@ -160,15 +158,15 @@ void Assembler::PassII()
 			}
 			int contents = stoi(strContents);
 			m_emul.insertMemory(loc, contents); // Add location and contents into VC3600 MEMORY
+			if (m_emul.insertMemory(loc, contents) == false)
+			{
+				string emsg = "Error: Ran out of memory";
+				Errors::RecordError(emsg);
+			}
 		}
 
 		// Compute the location of the next instruction.
 		loc = m_inst.LocationNextInstruction(loc);
-		if (loc > 9999)
-		{
-			string emsg = "Error: Ran out of memory";
-			Errors::RecordError(emsg);
-		}
 
 	}
 }
@@ -176,7 +174,7 @@ void Assembler::PassII()
 void Assembler::RunEmulator() { 
 	
 	Errors::DisplayErrors();
-
+	
 	cout << "Results from emulating program: \n" << endl;
 
 	m_emul.runProgram();

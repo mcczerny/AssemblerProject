@@ -111,16 +111,19 @@ void
 Instruction::SetNumOpCode() {
 
 	if (m_OpCode == "ADD") { m_NumOpCode = ADD; }
-	if (m_OpCode == "SUB") { m_NumOpCode = SUB; }
-	if (m_OpCode == "MULT") { m_NumOpCode = MULT; }
-	if (m_OpCode == "DIV") { m_NumOpCode = DIV; }
-	if (m_OpCode == "LOAD") { m_NumOpCode = LOAD; }
-	if (m_OpCode == "STORE") { m_NumOpCode = STORE; }
-	if (m_OpCode == "READ") { m_NumOpCode = READ; }
-	if (m_OpCode == "WRITE") { m_NumOpCode = WRITE; }
-	if (m_OpCode == "B") { m_NumOpCode = B; }
-	if (m_OpCode == "BM") { m_NumOpCode = BM; }
-	if (m_OpCode == "BZ") { m_NumOpCode = BZ; }
-	if (m_OpCode == "BP") { m_NumOpCode = BP; }
+	else if (m_OpCode == "SUB") { m_NumOpCode = SUB; }
+	else if (m_OpCode == "MULT") { m_NumOpCode = MULT; }
+	else if (m_OpCode == "DIV") { m_NumOpCode = DIV; }
+	else if (m_OpCode == "LOAD") { m_NumOpCode = LOAD; }
+	else if (m_OpCode == "STORE") { m_NumOpCode = STORE; }
+	else if (m_OpCode == "READ") { m_NumOpCode = READ; }
+	else if (m_OpCode == "WRITE") { m_NumOpCode = WRITE; }
+	else if (m_OpCode == "B") { m_NumOpCode = B; }
+	else if (m_OpCode == "BM") { m_NumOpCode = BM; }
+	else if (m_OpCode == "BZ") { m_NumOpCode = BZ; }
+	else if (m_OpCode == "BP") { m_NumOpCode = BP; }
+	else {
+		m_NumOpCode == 0;
+	}
 	
 }

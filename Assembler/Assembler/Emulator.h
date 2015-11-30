@@ -15,8 +15,14 @@ public:
 	}
 	// Records instructions and data into VC3600 memory.
 	bool insertMemory(int a_location, int a_contents) {
-		m_memory[a_location] = a_contents;	
-		return true;
+		if(a_location > 9999){
+				return false;
+			}
+		else	// Adds to memory location
+		{
+			m_memory[a_location] = a_contents;
+			return true;
+		}	
 	}
 
 	// Runs the VC3600 program recorded in memory.
@@ -32,17 +38,10 @@ public:
 				strContents = intToString.str();
 				int opCode;
 				int address;
-				if (strContents.length() == 5){
-
-					opCode = stoi(strContents.substr(0, 1));
-					address = stoi(strContents.substr(1, 5));
-				}
-				if (strContents.length() == 6) {
-
-					opCode = stoi(strContents.substr(0, 2));
-					address = stoi(strContents.substr(2, 5));
-				}
 				
+				opCode = stoi(strContents) / 10000;
+				address = stoi(strContents) % 10000;
+
 				switch (opCode) {
 				default: 
 					return false;
@@ -66,8 +65,8 @@ public:
 					m_memory[address] = ACC; // ADDR <- c(ACC)
 					break;
 				case 7: 
-					cout << "? ";
-					cin >> m_memory[address];
+					cout << "? ";	need to take only 6 digits still			// A line is read and its first 6 digits
+					cin >> m_memory[address];	// are placed in the specified address
 					break;
 				case 8: 
 					cout << m_memory[address] << endl; // c(ADDR) is displayed
