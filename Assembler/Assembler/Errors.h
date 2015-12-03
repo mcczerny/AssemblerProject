@@ -8,7 +8,7 @@
 class Errors {
 
 public:
-
+	
 	// Initializes error reports.
 	static void InitErrorReporting();
 
@@ -17,6 +17,9 @@ public:
 
 	// Displays the collected error message.
 	static void DisplayErrors();
+
+	// Checks if vector is empty
+	static bool IsEmpty();
 
 private:
 

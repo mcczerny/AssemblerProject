@@ -8,6 +8,8 @@
 #include "Instruction.h"
 #include "FileAccess.h"
 #include "Emulator.h"
+#include "Translation.h"
+
 
 
 class Assembler {
@@ -34,4 +36,6 @@ private:
 	SymbolTable m_symtab;	// Symbol table object
 	Instruction m_inst;	    // Instruction object
 	emulator m_emul;        // Emulator for VC3600
+	Translation m_trans;	// Translates Machine and Assembly code
+	
 };

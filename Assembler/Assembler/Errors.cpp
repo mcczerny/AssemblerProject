@@ -9,8 +9,8 @@
 vector <string> Errors::m_ErrorMsgs;
 
 // Initializes Error Report
-void Errors::InitErrorReporting() {
-
+void Errors::InitErrorReporting() 
+{
 	Errors::m_ErrorMsgs.clear();
 }
 
@@ -21,14 +21,19 @@ void Errors::RecordError(string &a_emsg)
 }
 
 // Displays the collected error message.
-void Errors::DisplayErrors() {
-
-	if (!m_ErrorMsgs.empty()) {
-		for (int i = 0; i < m_ErrorMsgs.size(); i++)
-		{
+void Errors::DisplayErrors() 
+{
+		for (int i = 0; i < m_ErrorMsgs.size(); i++) {
 			cout << m_ErrorMsgs[i] << endl;
 		}
-	}
-	else { return; } // No errors
 }
 
+bool Errors::IsEmpty()
+{
+	if (m_ErrorMsgs.empty()){
+		return true;
+	}
+	else {
+		return false;
+	}
+}

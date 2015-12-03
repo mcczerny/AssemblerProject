@@ -43,6 +43,8 @@ InstructionType ParseInstruction(string &a_buff);
 // Compute the location of the next instruction.
 int LocationNextInstruction(int a_loc);
 
+void Instruction::InitializeValues();
+
 // To access the label
 inline string &
 GetLabel() { return m_Label; };

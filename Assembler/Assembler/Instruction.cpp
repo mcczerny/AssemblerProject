@@ -6,26 +6,21 @@
 #include "Errors.h"
 
 
-
 // Parse the Instruction.
 Instruction::InstructionType
 Instruction::ParseInstruction(string &a_buff)
 {
-	// Set/Clear private variables
-	m_Label = "";           
-	m_OpCode = "";       
-	m_Operand = "";      
-	m_instruction = a_buff;   
-	m_NumOpCode = 0;     
-	m_IsNumericOperand = false;
-	m_OperandValue = 0;  
+	InitializeValues();
+	m_instruction = a_buff;	// Original instruction
 
-	// Checks for comment at start of buffer
-	if (a_buff[0] == ';') { return ST_Comment; }
-
-	// Checks for comment in buffer
-	if (a_buff.find(';')) { a_buff = a_buff.substr(0, a_buff.find(";")); }
-
+	// Checks for ';' at start of buffer
+	if (a_buff[0] == ';') { 
+		return ST_Comment; 
+	}
+	// Checks for ';' in buffer
+	if (a_buff.find(';')) { 
+		a_buff = a_buff.substr(0, a_buff.find(";"));  // Removes comment 
+	}
 	// Count number of words in buffer and puts each word into vector
 	vector<string> words;
 	stringstream strStream(a_buff);
@@ -35,28 +30,29 @@ Instruction::ParseInstruction(string &a_buff)
 		numOfWords++;
 		words.push_back(word);
 	}
-
 	// If 1 word in buffer
 	if (numOfWords == 1) {
 		transform(words[0].begin(), words[0].end(), words[0].begin(), ::toupper);	// Make OpCode uppercase
 		if (words[0] == "HALT") {
-			m_OpCode = "HALT";
+			m_OpCode = words[0];
 			m_NumOpCode = HALT;
 			m_type = ST_MachineLanguage;
 			return m_type;
 		}
 		if (words[0] == "END") {
-			m_OpCode = "END";
+			m_OpCode = words[0];
 			m_type = ST_AssemblerInstr;
 			return m_type;
 		}
+		else {
+			string emsg = "Error: Invalid OpCode";
+			Errors::RecordError(emsg);
+		}
 	}
-
 	// If 2 words in buffer
-	if (numOfWords == 2) {
+	else if (numOfWords == 2) {
 		transform(words[0].begin(), words[0].end(), words[0].begin(), ::toupper);	// Make OpCode uppercase
 		m_OpCode = words[0];
-
 		SetNumOpCode(); // Sets NumOpCode to appropriate number
 
 		m_Operand = words[1];
@@ -71,13 +67,11 @@ Instruction::ParseInstruction(string &a_buff)
 			return m_type;
 		}
 	}
-
 	// If 3 words in buffer
-	if (numOfWords == 3) {
+	else if (numOfWords == 3) {
 		m_Label = words[0];
 		transform(words[1].begin(), words[1].end(), words[1].begin(), ::toupper);	// Make OpCode uppercase
 		m_OpCode = words[1];
-
 		SetNumOpCode(); // Sets NumOpCode to appropriate number
 
 		m_Operand = words[2];
@@ -92,6 +86,16 @@ Instruction::ParseInstruction(string &a_buff)
 			return m_type;
 		}
 	}
+
+	else {
+		string emsg = "Error: Extra operands";
+		Errors::RecordError(emsg);
+	}
+	// Checks for valid OpCode
+	if (m_NumOpCode == 0 && m_IsNumericOperand == false) {
+		string emsg = "Error: Invalid OpCode";
+		Errors::RecordError(emsg);
+	}
 };
 
 // Compute the location of the next instruction.
@@ -100,11 +104,12 @@ Instruction::LocationNextInstruction(int a_loc)
 {
 	if (m_IsNumericOperand == true) {
 
+
 		if (m_OpCode == "ORG") { return m_OperandValue; }
 		if (m_OpCode == "DC") { return a_loc + 1; }
 		if (m_OpCode == "DS") { return a_loc + m_OperandValue; }
 	}
-	if (m_IsNumericOperand == false) { return a_loc + 1; }
+	else { return a_loc + 1; }
 };
 
 void
@@ -122,8 +127,19 @@ Instruction::SetNumOpCode() {
 	else if (m_OpCode == "BM") { m_NumOpCode = BM; }
 	else if (m_OpCode == "BZ") { m_NumOpCode = BZ; }
 	else if (m_OpCode == "BP") { m_NumOpCode = BP; }
+	else if (m_OpCode == "HALT") { m_NumOpCode = HALT; }
 	else {
-		m_NumOpCode == 0;
+		m_NumOpCode = 0;
 	}
 	
+}
+
+void Instruction::InitializeValues() {
+	m_Label = "";
+	m_OpCode = "";
+	m_Operand = "";
+	m_instruction = "";
+	m_NumOpCode = 0;
+	m_IsNumericOperand = false;
+	m_OperandValue = 0;
 }

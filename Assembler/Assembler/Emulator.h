@@ -18,8 +18,8 @@ public:
 		if(a_location > 9999){
 				return false;
 			}
-		else	// Adds to memory location
-		{
+		else{	// Adds to memory location
+		
 			m_memory[a_location] = a_contents;
 			return true;
 		}	
@@ -29,21 +29,20 @@ public:
 	bool runProgram() {
 		
 		int ACC = 0;
-		for (int i = 0; i < MEMSZ; i++)
+		for (int i = 100; i < MEMSZ; i++)
 			if (m_memory[i] != 0)
 			{
 				string strContents;
 				ostringstream intToString;
 				intToString << m_memory[i];
 				strContents = intToString.str();
-				int opCode;
-				int address;
 				
-				opCode = stoi(strContents) / 10000;
-				address = stoi(strContents) % 10000;
+				int opCode = stoi(strContents) / 10000;
+				int address = stoi(strContents) % 10000;
 
 				switch (opCode) {
 				default: 
+					cout << "Error: Illegal OpCode" << endl;
 					return false;
 					break;
 				case 1:
@@ -65,8 +64,10 @@ public:
 					m_memory[address] = ACC; // ADDR <- c(ACC)
 					break;
 				case 7: 
-					cout << "? ";	need to take only 6 digits still			// A line is read and its first 6 digits
-					cin >> m_memory[address];	// are placed in the specified address
+					char userInput[7];
+					cout << "? ";
+					cin.getline(userInput, 7);				// A line is read and its first 6 digits
+					m_memory[address] = stoi(userInput);	// are placed in the specified address
 					break;
 				case 8: 
 					cout << m_memory[address] << endl; // c(ADDR) is displayed

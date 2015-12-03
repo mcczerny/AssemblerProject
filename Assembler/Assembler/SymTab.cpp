@@ -3,6 +3,7 @@
 //
 #include "stdafx.h"
 #include "SymTab.h"
+#include "Errors.h"
 
 /*
 NAME
@@ -25,9 +26,7 @@ SymbolTable::AddSymbol(string &a_symbol, int a_loc)
 	map<string, int>::iterator st;
 	st = m_symbolTable.find(a_symbol);
 	if (st != m_symbolTable.end()) {
-		string emsg = "Error: Mutiply defined symbol";
 		st->second = multiplyDefinedSymbol;
-		
 		return;
 	}
 	// Record a the  location in the symbol table.
