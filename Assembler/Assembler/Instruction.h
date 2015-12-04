@@ -38,12 +38,20 @@ public:
 	};
 
 // Parse the Instruction.
-InstructionType ParseInstruction(string &a_buff);
+InstructionType 
+ParseInstruction(string &a_buff);
 
-// Compute the location of the next instruction.
-int LocationNextInstruction(int a_loc);
+//Compute the location of the next instruction
+int 
+LocationNextInstruction(int a_loc);
 
-void Instruction::InitializeValues();
+// To set number of OpCode
+void
+SetNumOpCode();
+
+//Clears the private members of instruction
+void 
+InitializeValues();
 
 // To access the label
 inline string &
@@ -56,10 +64,6 @@ isLabel() { return !m_Label.empty(); }
 // To access the OpCode
 inline string &
 GetOpCode() { return m_OpCode; }
-
-// To set number of OpCode
-void
-SetNumOpCode(); 
 
 // To access number of OpCode
 int &

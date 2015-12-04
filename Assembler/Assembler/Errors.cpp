@@ -8,27 +8,81 @@
 // Initializes Vector
 vector <string> Errors::m_ErrorMsgs;
 
-// Initializes Error Report
-void Errors::InitErrorReporting() 
+/*
+NAME
+
+InitErrorReporting - Initializes error report
+
+SYNOPSIS
+
+void InitErrorReporting()
+
+DESCRIPTION
+
+This function will clear the vector that holds the error messages so it will be empty at the 
+beginning of PassII
+*/
+void 
+Errors::InitErrorReporting() 
 {
 	Errors::m_ErrorMsgs.clear();
 }
 
-// Records an error message.
-void Errors::RecordError(string &a_emsg)
+/*
+NAME
+
+RecordError - Records an error message
+
+SYNOPSIS
+
+void RecordError(string &a_emsg)
+
+DESCRIPTION
+
+This function will push "a_emsg" to the vector "m_ErrorMsgs".
+*/
+void 
+Errors::RecordError(string &a_emsg)
 {
 	Errors::m_ErrorMsgs.push_back(a_emsg);
 }
 
-// Displays the collected error message.
-void Errors::DisplayErrors() 
+/*
+NAME
+
+DisplayErrors - Displays the collectedd error message
+
+SYNOPSIS
+
+void DisplayErrors()
+
+DESCRIPTION
+
+This function will push "a_emsg" to the vector "m_ErrorMsgs".
+*/
+void 
+Errors::DisplayErrors() 
 {
 		for (int i = 0; i < m_ErrorMsgs.size(); i++) {
 			cout << m_ErrorMsgs[i] << endl;
 		}
 }
 
-bool Errors::IsEmpty()
+/*
+NAME
+
+IsEmpty - Checks if vector is empty
+
+SYNOPSIS
+
+IsEmpty() 
+
+DESCRIPTION
+
+This function will determine if there are any error messages in the vector "m_ErrorMsgs"
+*/
+bool 
+Errors::IsEmpty()
 {
 	if (m_ErrorMsgs.empty()){
 		return true;

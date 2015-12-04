@@ -10,7 +10,6 @@ public:
 
 	const static int MEMSZ = 10000;	// The size of the memory of the VC3600.
 	emulator() {
-
 		memset(m_memory, 0, MEMSZ * sizeof(int));
 	}
 	// Records instructions and data into VC3600 memory.
@@ -19,7 +18,6 @@ public:
 				return false;
 			}
 		else{	// Adds to memory location
-		
 			m_memory[a_location] = a_contents;
 			return true;
 		}	

@@ -5,8 +5,26 @@
 #include "Instruction.h"
 #include "Errors.h"
 
+/*
+NAME
 
-// Parse the Instruction.
+ParseInstruction - Parses the instruction
+
+SYNOPSIS
+
+InstructionType ParseInstruction(string&a_buff)
+
+DESCRIPTION
+
+This function will parse the instruction that is in "a_buff". First checks to see if there is a comment 
+in "a_buff" as denoted with a ";". If "a_buff" is only a comment then comment is returned and if part of 
+the buffer contains a comment it is removed. Next each word is broken down in "a_buff" and added into the
+vector "words". The instruction is broken down depending on the amount of words. The label, OpCode, and 
+Operand are detemined depending on the number of words. The OpCode is made all uppercase if it has one.
+Then depending on those values the number of OpCode, a bool value determining if the Operand is a number, 
+and the number of the operand is filled in. "m_type" is returned and that determines if the instruction 
+is an END, Machine language or Assembly instruction. 
+*/
 Instruction::InstructionType
 Instruction::ParseInstruction(string &a_buff)
 {
@@ -86,7 +104,6 @@ Instruction::ParseInstruction(string &a_buff)
 			return m_type;
 		}
 	}
-
 	else {
 		string emsg = "Error: Extra operands";
 		Errors::RecordError(emsg);
@@ -98,7 +115,20 @@ Instruction::ParseInstruction(string &a_buff)
 	}
 };
 
-// Compute the location of the next instruction.
+/*
+NAME
+
+LocationNextInstruction - Compute the location of the next instruction
+
+SYNOPSIS
+
+int LocationNextInstruction(int a_loc)
+
+DESCRIPTION
+
+This function will take "a_loc" and use the values taken from parsing the instruction to determine
+the location of the next instruction. The location of the next instruction is returned.
+*/
 int
 Instruction::LocationNextInstruction(int a_loc)
 {
@@ -112,9 +142,22 @@ Instruction::LocationNextInstruction(int a_loc)
 	else { return a_loc + 1; }
 };
 
+/*
+NAME
+
+SetNumOpCode - To set the number of the OpCode
+
+SYNOPSIS
+
+void SetNumOpCode()
+
+DESCRIPTION
+
+This function will set the number value of the OpCode by using the enumarator OpCodes to determine 
+it's number. If the number is not in the enumarator then the number of OpCode it is set to 0. 
+*/
 void
 Instruction::SetNumOpCode() {
-
 	if (m_OpCode == "ADD") { m_NumOpCode = ADD; }
 	else if (m_OpCode == "SUB") { m_NumOpCode = SUB; }
 	else if (m_OpCode == "MULT") { m_NumOpCode = MULT; }
@@ -131,10 +174,24 @@ Instruction::SetNumOpCode() {
 	else {
 		m_NumOpCode = 0;
 	}
-	
 }
 
-void Instruction::InitializeValues() {
+/*
+NAME
+
+InitializeValues - Clears the private members of instruction 
+
+SYNOPSIS
+
+int InitializeValues()
+
+DESCRIPTION
+
+This function will set "m_Label", "m_OpCode", "m_Operand", and "m_instruction" to an empty value. The function 
+also sets "m_NumOpCode" and "m_OperandValue" to 0. It sets the bool "m_IsNumbericOperand" equal to false.
+*/
+void 
+Instruction::InitializeValues() {
 	m_Label = "";
 	m_OpCode = "";
 	m_Operand = "";

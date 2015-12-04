@@ -8,7 +8,7 @@
 /*
 NAME
 
-AddSymbol - adds a new symbol to the symbol table.
+AddSymbol - Adds a new symbol to the symbol table.
 
 SYNOPSIS
 
@@ -47,7 +47,6 @@ DESCRIPTION
 This function will use the iterator it, to go through map and output 
 each symbol with it's corresponding location in the symbol table.
 */
-
 void
 SymbolTable::DisplaySymbolTable()
 {
@@ -58,7 +57,6 @@ SymbolTable::DisplaySymbolTable()
 		i++;
 	}
 }
-
 
 /*
 NAME
