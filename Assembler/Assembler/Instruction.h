@@ -49,6 +49,16 @@ LocationNextInstruction(int a_loc);
 void
 SetNumOpCode();
 
+void
+CheckLabel(int a_numOfWords);
+
+void
+CheckOpCode(int a_numOfWords);
+
+void
+CheckOperand(int a_numOfWords);
+
+
 //Clears the private members of instruction
 void 
 InitializeValues();

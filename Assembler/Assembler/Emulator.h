@@ -37,6 +37,10 @@ public:
 				
 				int opCode = stoi(strContents) / 10000;
 				int address = stoi(strContents) % 10000;
+				if (address > 9999) {
+					cout << "Error: Not a valid memory location" << endl;
+					return false;
+				}
 
 				switch (opCode) {
 				default: 
@@ -64,8 +68,13 @@ public:
 				case 7: 
 					char userInput[7];
 					cout << "? ";
-					cin.getline(userInput, 7);				// A line is read and its first 6 digits
-					m_memory[address] = stoi(userInput);	// are placed in the specified address
+					cin.getline(userInput, 7);	// A line is read and its first 6 digits
+					if (cin.fail())				// are placed in the specified address
+					{
+						cin.clear();
+						cin.ignore(INT_MAX, '\n');
+					}
+					m_memory[address] = stoi(userInput);	
 					break;
 				case 8: 
 					cout << m_memory[address] << endl; // c(ADDR) is displayed

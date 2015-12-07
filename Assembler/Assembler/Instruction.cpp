@@ -48,69 +48,49 @@ Instruction::ParseInstruction(string &a_buff)
 		numOfWords++;
 		words.push_back(word);
 	}
+
 	// If 1 word in buffer
 	if (numOfWords == 1) {
 		transform(words[0].begin(), words[0].end(), words[0].begin(), ::toupper);	// Make OpCode uppercase
-		if (words[0] == "HALT") {
-			m_OpCode = words[0];
-			m_NumOpCode = HALT;
-			m_type = ST_MachineLanguage;
-			return m_type;
-		}
-		if (words[0] == "END") {
-			m_OpCode = words[0];
-			m_type = ST_AssemblerInstr;
-			return m_type;
-		}
-		else {
-			string emsg = "Error: Invalid OpCode";
-			Errors::RecordError(emsg);
-		}
+
+		m_OpCode = words[0];
+		SetNumOpCode(); //	Sets NumOpCode to approriate number
+		CheckOpCode(numOfWords);	// Chceks OpCode for errors
+
+		return m_type;	
 	}
+	
 	// If 2 words in buffer
 	else if (numOfWords == 2) {
 		transform(words[0].begin(), words[0].end(), words[0].begin(), ::toupper);	// Make OpCode uppercase
+		
 		m_OpCode = words[0];
 		SetNumOpCode(); // Sets NumOpCode to appropriate number
+		CheckOpCode(numOfWords);	//	Checks OpCode for errors
 
 		m_Operand = words[1];
-		if (isdigit(m_Operand[0])) {
-			m_IsNumericOperand = true;
-			m_OperandValue = stoi(m_Operand);
-			m_type = ST_AssemblerInstr;
-			return m_type;
-		}
-		else { 
-			m_type = ST_MachineLanguage;
-			return m_type;
-		}
+		CheckOperand(numOfWords);	//	Checks Operand for errors
+
+		return m_type;
 	}
 	// If 3 words in buffer
 	else if (numOfWords == 3) {
 		m_Label = words[0];
+		CheckLabel(numOfWords);
+
 		transform(words[1].begin(), words[1].end(), words[1].begin(), ::toupper);	// Make OpCode uppercase
+
 		m_OpCode = words[1];
 		SetNumOpCode(); // Sets NumOpCode to appropriate number
+		CheckOpCode(numOfWords);
 
 		m_Operand = words[2];
-		if (isdigit(m_Operand[0])) {
-			m_IsNumericOperand = true;
-			m_OperandValue = stoi(m_Operand);
-			m_type = ST_AssemblerInstr;
-			return m_type;
-		}
-		else {
-			m_type = ST_MachineLanguage;
-			return m_type;
-		}
+		CheckOperand(numOfWords);
+
+		return m_type;
 	}
-	else {
+	else {	// To many operands in instruction
 		string emsg = "Error: Extra operands";
-		Errors::RecordError(emsg);
-	}
-	// Checks for valid OpCode
-	if (m_NumOpCode == 0 && m_IsNumericOperand == false) {
-		string emsg = "Error: Invalid OpCode";
 		Errors::RecordError(emsg);
 	}
 };
@@ -172,7 +152,7 @@ Instruction::SetNumOpCode() {
 	else if (m_OpCode == "BP") { m_NumOpCode = BP; }
 	else if (m_OpCode == "HALT") { m_NumOpCode = HALT; }
 	else {
-		m_NumOpCode = 0;
+		m_NumOpCode = 0;	// Must be assembly instruction or invalid OpCode
 	}
 }
 
@@ -199,4 +179,129 @@ Instruction::InitializeValues() {
 	m_NumOpCode = 0;
 	m_IsNumericOperand = false;
 	m_OperandValue = 0;
+}
+
+void
+Instruction::CheckLabel(int a_numOfWords)
+{
+	if (a_numOfWords == 3)
+	{
+		// Label cannot be more than 10 characters in length
+		if (m_Label.size() > 10) {
+			string emsg = "Error: Label is to large";
+			Errors::RecordError(emsg);
+		}
+		// Label must start with letter and the remaining may be letters and digits
+		if (isalpha(m_Label[0]) == false) {
+			string emsg = "Error: Label must start with letter";
+			Errors::RecordError(emsg);
+		}
+	}
+}
+
+void
+Instruction::CheckOpCode(int a_numOfWords)
+{
+	if (a_numOfWords == 1) {
+
+		if (m_OpCode == "HALT" || m_OpCode == "END") {
+			if (m_OpCode == "HALT")
+			{
+				m_type = ST_MachineLanguage;
+			}
+			if (m_OpCode == "END")
+			{
+				m_type = ST_End;
+			}
+		}
+		else {	// Invalid OpCode
+			m_OpCode = "??";
+			string emsg = "Invalid OpCode;";
+			Errors::RecordError(emsg);
+			m_type = ST_MachineLanguage;
+		}
+	}
+	if (a_numOfWords == 2)
+	{
+		if (m_NumOpCode == 0 && m_OpCode == "ORG") {
+			m_type = ST_AssemblerInstr;
+		}
+		if (m_NumOpCode == 0 && m_OpCode != "ORG") {	// Invalid OpCode
+			m_OpCode = "??";
+			m_type = ST_MachineLanguage;
+			string emsg = "Invalid OpCode";
+			Errors::RecordError(emsg);
+		}
+		if(m_NumOpCode != 0) {	// Symbolic OpCode
+			m_type = ST_MachineLanguage;
+		}
+	}
+
+
+	if (a_numOfWords == 3) {
+
+		if (m_NumOpCode != 0) { // Symbolic OpCode
+			m_type = ST_MachineLanguage;
+		}
+		else{	// Instruction
+			if (m_NumOpCode == 0 && m_OpCode == "DS" || m_OpCode == "DC") {
+				m_type = ST_AssemblerInstr;
+			}
+			else {	// Invalid instruction
+				m_type = ST_MachineLanguage;
+				m_OpCode = "??";
+				string emsg = "Invalid OpCode";
+				Errors::RecordError(emsg);
+			}
+		}		
+	}
+}
+
+void
+Instruction::CheckOperand(int a_numOfWords)
+{
+	if (a_numOfWords == 2)
+	{
+		if (m_NumOpCode == 0 && m_OpCode == "ORG") {
+			if (isalpha(m_Operand[0]) == false)	{
+				m_IsNumericOperand = true;
+				m_OperandValue = stoi(m_Operand);
+			}
+			else { //	ORG must have numeric operand
+				m_IsNumericOperand = false;
+				string emsg = "Error: ORG must have numeric operand";
+				Errors::RecordError(emsg);
+			}
+		}
+		
+	}
+	if (a_numOfWords == 3)
+	{
+		if (m_OpCode == "DS" || m_OpCode == "DC") {	// These Opcodes must have numeric operand
+			if (isalpha(m_Operand[0]) == false) {
+				m_IsNumericOperand = true;
+				m_OperandValue = stoi(m_Operand);
+			}
+			else {	// Wrong type of operand
+				m_IsNumericOperand = false;
+				m_type = ST_AssemblerInstr;
+				string emsg = "Error: DS and DC instructions must have a numberic operand";
+				Errors::RecordError(emsg);
+			}
+		}
+		else {	// Symbolic OpCodes
+				// Symbolic opcodes do not take numberic operands
+			if (m_NumOpCode != 0 && isalpha(m_Operand[0]) == false)	//	Operand numeric
+			{
+				string emsg = "Error: Symbolic OpCode does not take numeric operand";
+				Errors::RecordError(emsg);
+			}
+			//	Operand name is to long
+			if (m_Operand.size() > 10) {
+				string emsg = "Error: Operand name is to long";
+				Errors::RecordError(emsg);
+			}
+			m_type = ST_MachineLanguage; // can probably remove
+		}	
+	}
 }

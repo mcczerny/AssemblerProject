@@ -3,6 +3,7 @@
 //
 #include "stdafx.h"
 #include "Translation.h"
+#include "Errors.h"
 
 /*
 NAME
@@ -35,15 +36,17 @@ void Translation::DisplayTranslation(Instruction::InstructionType a_st, Instruct
 			cout << setw(12) << left << a_loc << setw(12) << left << m_strContents << a_inst.GetOriginalInstruction() << endl;
 			}
 		
-			if (a_inst.GetOpCode() == "ORG") { cout << setw(24) << left << a_loc << a_inst.GetOriginalInstruction() << endl; }
+		if (a_inst.GetOpCode() == "ORG") { cout << setw(24) << left << a_loc << a_inst.GetOriginalInstruction() << endl; }
 
-			if (a_inst.GetOpCode() == "END") { cout << "                        " << a_inst.GetOriginalInstruction() << endl; }
+		if (a_inst.GetOpCode() == "END") { cout << "                        " << a_inst.GetOriginalInstruction() << endl; }
+
 	}
 
 	if (a_st == Instruction::ST_MachineLanguage) {
 		int pointerLoc; // Used to get pointer location from symbol table
 		intToString << a_inst.GetNumOpCode();
 		m_strContents = intToString.str();
+		
 	
 		if (a_inst.GetOpCode() == "HALT") {
 			for (int i = m_strContents.size(); i < 6; i++) {
@@ -54,13 +57,39 @@ void Translation::DisplayTranslation(Instruction::InstructionType a_st, Instruct
 		else {	// For All Other OpCodes
 			a_symtab.LookupSymbol(a_inst.GetOperand(), pointerLoc);
 
-			if (m_strContents.size() == 1) { m_strContents.insert(0, "0"); }	// If OpCode is only 1 char a 0 is added to front
-			intToString.str("");	// Clear stringstream for use again
-			intToString << pointerLoc;
-			m_strContents = m_strContents + intToString.str();
+			if (pointerLoc == -999)	// Checks for multiply defined symbol
+			{
+				string emsg = "Error: Multiply Defined Symbol";
+				Errors::RecordError(emsg);
+			}
 
-			if (m_strContents.size() == 5) { m_strContents.insert(2, "0"); }	// If the m_strContents is size 5, we need to add a 0 after the OpCode.
-			cout << setw(12) << left << a_loc << setw(12) << left << m_strContents << setw(12) << left << a_inst.GetOriginalInstruction() << endl;
+			if (a_symtab.LookupSymbol(a_inst.GetOperand(), pointerLoc) == false)	// If pointer location cannot be found
+			{
+				
+				if (m_strContents.size() == 1) { m_strContents.insert(0, "0"); }	// If OpCode is only 1 char a 0 is added to front	
+
+				// ???? added at end of m_strContents to show location cannot be found when diplaying translation
+				m_strContents = m_strContents + "????";	
+				cout << setw(12) << left << a_loc << setw(12) << left << m_strContents << setw(12) << left << a_inst.GetOriginalInstruction() << endl;
+
+				string emsg = "Error: Memory location of label not found";
+				Errors::RecordError(emsg);
+			}
+			
+			if(a_symtab.LookupSymbol(a_inst.GetOperand(), pointerLoc) == true)
+			{
+				// If OpCode is only 1 char a 0 is added to front
+				if (m_strContents.size() == 1) { m_strContents.insert(0, "0"); }	
+				intToString.str("");	// Clear stringstream for use again
+				intToString << pointerLoc;
+				m_strContents = m_strContents + intToString.str();
+
+
+				if (m_strContents.size() == 5) { m_strContents.insert(2, "0"); }	// If the m_strContents is size 5, we need to add a 0 after the OpCode.
+				cout << setw(12) << left << a_loc << setw(12) << left << m_strContents << setw(12) << left << a_inst.GetOriginalInstruction() << endl;
+			}
+			
+		
 		}
 	}		
 }

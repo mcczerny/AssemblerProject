@@ -84,4 +84,7 @@ SymbolTable::LookupSymbol(string &a_symbol, int &a_loc)
 		a_loc = it->second;
 		return true;
 	}
+	else
+		return false;
+	
 }

@@ -133,7 +133,9 @@ Assembler::PassII()
 		Instruction::InstructionType st = m_inst.ParseInstruction(buff);
 
 		if (st == Instruction::ST_End) {
-			if (!m_facc.GetNextLine(buff)) { return; } // END called at end of file
+			if (m_facc.GetNextLine(buff) == false) {  
+				return;
+			} // END called at end of file
 
 			else { // END called before end of file
 				string emsg = "Error: End is not at end of file";
@@ -167,6 +169,13 @@ Assembler::PassII()
 
 		//	Compute the location of the next instruction.
 		loc = m_inst.LocationNextInstruction(loc);
+
+		if (loc > 9999)
+		{
+			string emsg = "Error: Ran out of memory";
+			Errors::RecordError(emsg);
+			return;
+		}
 		}
 	}
 
@@ -179,6 +188,7 @@ Assembler::RunEmulator() {
 		cout << "\nEnd of emulation" << endl;
 	}
 	else {
+		cout << "\n";
 		Errors::DisplayErrors();
 	}
 }
