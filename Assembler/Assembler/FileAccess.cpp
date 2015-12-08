@@ -74,6 +74,7 @@ FileAccess::GetNextLine(string &a_buff)
 {
 	if (m_sfile.eof()) return false;
 
+
 	getline(m_sfile, a_buff);
 
 	// Return indicating success.

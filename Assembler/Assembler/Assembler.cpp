@@ -41,6 +41,9 @@ void Assembler::PassI()
 		// Read the next line from the source file.
 		string buff;
 		if (!m_facc.GetNextLine(buff)) { return; }
+
+		if (buff == "") { continue; }
+
 		// Parse the line and get the instruction type.
 		Instruction::InstructionType st = m_inst.ParseInstruction(buff);
 
@@ -129,11 +132,14 @@ Assembler::PassII()
 				return;
 			}
 		}
+
+		if (buff == "") { continue; }
+
 		// Parse the line and get the instruction type.
 		Instruction::InstructionType st = m_inst.ParseInstruction(buff);
 
 		if (st == Instruction::ST_End) {
-			if (m_facc.GetNextLine(buff) == false) {  
+			if (m_facc.GetNextLine(buff) == false) {
 				return;
 			} // END called at end of file
 
@@ -151,7 +157,7 @@ Assembler::PassII()
 		if (st != Instruction::ST_MachineLanguage && st != Instruction::ST_AssemblerInstr) continue;
 
 		// Outputs translation of machine and assembly language
-		m_trans.DisplayTranslation(st, m_inst, m_symtab, loc);	
+		m_trans.DisplayTranslation(st, m_inst, m_symtab, loc);
 
 		//	Insert DC assembly instruction into memory
 		//	DC is the only assembly instruction put into memory
@@ -176,8 +182,8 @@ Assembler::PassII()
 			Errors::RecordError(emsg);
 			return;
 		}
-		}
 	}
+}
 
 void 
 Assembler::RunEmulator() { 

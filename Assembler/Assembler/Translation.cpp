@@ -19,7 +19,7 @@ DESCRIPTION
 This function will output the translation, and the original instruction by using "a_st" to determine if instruction is either 
 assembly or machine language code. Then "a_inst" is used in order to get the OpCode in order to determine what to output. The 
 symbol table will be accessed by "a_symtab" and the "contents" that will be inserted into emulator are generated if needed. 
-Finally "a_loc" the generated contents (if needed) and the original instruction are formated is printed out to user.
+Finally "a_loc", the generated contents (if needed) and the original instruction are formated is printed out to user.
 */
 
 void Translation::DisplayTranslation(Instruction::InstructionType a_st, Instruction a_inst, SymbolTable a_symtab, int a_loc) {
