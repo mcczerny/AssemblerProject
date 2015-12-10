@@ -1,4 +1,4 @@
-org 100
+       org 100
                 read n
 more        load n; This is a comment
 
@@ -11,8 +11,8 @@ more        load n; This is a comment
                 bp more
                 write fac
                 halt
-n              ds 100; just to show that you code can handle big areas.
-fac           dc 1
-one          dc 1
-test          dc 1234 ; show your program can handle big constants.
+n               ds 100; just to show that you code can handle big areas.
+fac             dc 1
+one             dc 1
+test            dc 1234 ; show your program can handle big constants.
                 end

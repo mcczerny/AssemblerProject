@@ -58,7 +58,6 @@ CheckOpCode(int a_numOfWords);
 void
 CheckOperand(int a_numOfWords);
 
-
 //Clears the private members of instruction
 void 
 InitializeValues();
@@ -90,6 +89,9 @@ GetOperandValue() { return m_OperandValue; }
 // To access original instruction
 string
 GetOriginalInstruction() { return m_instruction; }
+
+InstructionType &
+GetInstructionType() { return m_type; }
 
 private:
 

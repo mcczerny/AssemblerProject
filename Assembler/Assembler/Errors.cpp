@@ -50,7 +50,7 @@ Errors::RecordError(string &a_emsg)
 /*
 NAME
 
-DisplayErrors - Displays the collectedd error message
+DisplayErrors - Displays the collected error message
 
 SYNOPSIS
 

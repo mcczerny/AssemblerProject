@@ -15,18 +15,19 @@
 class Assembler {
 
 public:
+	// Constructor for the assembler
 	Assembler(int argc, char *argv[]);
 
-	// Pass I - establish the locations of the symbols
+	// Pass I - Establishes the locations of the symbols
 	void PassI();
+	
+	// Displays the symbols in the symbol table
+	void DisplaySymbolTable();
 
-	// Pass II - generate a translation
+	// Pass II - Generate a translation
 	void PassII();
 	
-	// Display the symbols in the symbol table.
-	void DisplaySymbolTable();
-	
-	// Run emulator on the translation.
+	// Runs emulator on the translation
 	void RunEmulator();
 
 private:
@@ -34,7 +35,7 @@ private:
 	FileAccess m_facc;	    // File Access object
 	SymbolTable m_symtab;	// Symbol table object
 	Instruction m_inst;	    // Instruction object
-	emulator m_emul;        // Emulator for VC3600
+	Emulator m_emul;        // Emulator for VC3600
 	Translation m_trans;	// Translates Machine and Assembly code
 	
 };

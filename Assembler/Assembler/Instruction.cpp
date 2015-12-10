@@ -8,37 +8,58 @@
 /*
 NAME
 
-ParseInstruction - Parses the instruction
+	ParseInstruction - Parses the instruction
 
 SYNOPSIS
 
-InstructionType ParseInstruction(string&a_buff)
+	InstructionType ParseInstruction(string&a_buff)
+		
+		a_buff	 --> 
 
 DESCRIPTION
 
-This function will parse the instruction that is in "a_buff". First checks to see if there is a comment 
-in "a_buff" as denoted with a ";". If "a_buff" is only a comment then comment is returned and if part of 
-the buffer contains a comment it is removed. Next each word is broken down in "a_buff" and added into the
-vector "words". The instruction is broken down depending on the amount of words. The label, OpCode, and 
-Operand are detemined depending on the number of words. The OpCode is made all uppercase if it has one.
-Then depending on those values the number of OpCode, a bool value determining if the Operand is a number, 
-and the number of the operand is filled in. "m_type" is returned and that determines if the instruction 
-is an END, Machine language or Assembly instruction. 
+	This function will parse the instruction that is in "a_buff". First checks to see if there is a comment 
+	in "a_buff" as denoted with a ";". If "a_buff" is only a comment then comment is returned and if part of 
+	the buffer contains a comment it is removed. Next each word is broken down in "a_buff" and added into the
+	vector "words". The instruction is broken down depending on the amount of words and he label, OpCode, and 
+	Operand are detemined, Every label, OpCode and Operand are then checked with CheckLabel, CheckOpCode, and the
+	CheckOperand functions repectively that determine if they are valid, doing the error checking and determining
+	the return type among other things.
+
+RETURNS
+
+	"m_type" is returned. It determines if the line that was passed in "a_buff" is a comment, an END, 
+	Machine language or Assembly instruction.
 */
 Instruction::InstructionType
 Instruction::ParseInstruction(string &a_buff)
 {
 	InitializeValues();
 	m_instruction = a_buff;	// Original instruction
-
+	
 	// Checks for ';' at start of buffer
 	if (a_buff[0] == ';') { 
-		return ST_Comment; 
+		m_type = ST_Comment;
+		return m_type; 
 	}
+
 	// Checks for ';' in buffer
 	if (a_buff.find(';')) { 
 		a_buff = a_buff.substr(0, a_buff.find(";"));  // Removes comment 
 	}
+
+	// Checks for empty line
+	if (a_buff == "") {
+		m_type = ST_Comment;
+		return m_type;
+	}
+
+	// Checks for line with only spaces
+	if (a_buff.find_first_not_of(' ') == string::npos) {
+		m_type = ST_Comment;
+		return m_type;
+	}
+
 	// Count number of words in buffer and puts each word into vector
 	vector<string> words;
 	stringstream strStream(a_buff);
@@ -55,7 +76,7 @@ Instruction::ParseInstruction(string &a_buff)
 
 		m_OpCode = words[0];
 		SetNumOpCode(); //	Sets NumOpCode to approriate number
-		CheckOpCode(numOfWords);	// Chceks OpCode for errors
+		CheckOpCode(numOfWords);	// Checks OpCode for errors
 
 		return m_type;	
 	}
@@ -73,8 +94,14 @@ Instruction::ParseInstruction(string &a_buff)
 
 		return m_type;
 	}
-	// If 3 words in buffer
-	else if (numOfWords == 3) {
+	
+	// If 3 words in buffer OR to many words
+	else {
+		if (numOfWords > 3)
+		{
+			string emsg = "Error: Extra operands in instruction";
+			Errors::RecordError(emsg);
+		}
 		m_Label = words[0];
 		CheckLabel(numOfWords);
 
@@ -88,10 +115,6 @@ Instruction::ParseInstruction(string &a_buff)
 		CheckOperand(numOfWords);
 
 		return m_type;
-	}
-	else {	// To many operands in instruction
-		string emsg = "Error: Extra operands";
-		Errors::RecordError(emsg);
 	}
 };
 
@@ -221,6 +244,7 @@ Instruction::CheckOpCode(int a_numOfWords)
 			m_type = ST_MachineLanguage;
 		}
 	}
+
 	if (a_numOfWords == 2)
 	{
 		if (m_NumOpCode == 0 && m_OpCode == "ORG") {
@@ -260,10 +284,10 @@ Instruction::CheckOpCode(int a_numOfWords)
 void
 Instruction::CheckOperand(int a_numOfWords)
 {
-	if (a_numOfWords == 2)
-	{
+	// 2 words in instruction
+	if (a_numOfWords == 2) { 
 		if (m_NumOpCode == 0 && m_OpCode == "ORG") {
-			if (isalpha(m_Operand[0]) == false)	{
+			if (isalpha(m_Operand[0]) == false) {
 				m_IsNumericOperand = true;
 				m_OperandValue = stoi(m_Operand);
 			}
@@ -272,11 +296,11 @@ Instruction::CheckOperand(int a_numOfWords)
 				string emsg = "Error: ORG must have numeric operand";
 				Errors::RecordError(emsg);
 			}
+			return;
 		}
-		
 	}
-	if (a_numOfWords == 3)
-	{
+	// 3 words in instruction
+	if (a_numOfWords == 3){
 		if (m_OpCode == "DS" || m_OpCode == "DC") {	// These Opcodes must have numeric operand
 			if (isalpha(m_Operand[0]) == false) {
 				m_IsNumericOperand = true;
@@ -288,20 +312,24 @@ Instruction::CheckOperand(int a_numOfWords)
 				string emsg = "Error: DS and DC instructions must have a numberic operand";
 				Errors::RecordError(emsg);
 			}
+			return;
 		}
-		else {	// Symbolic OpCodes
-				// Symbolic opcodes do not take numberic operands
-			if (m_NumOpCode != 0 && isalpha(m_Operand[0]) == false)	//	Operand numeric
-			{
-				string emsg = "Error: Symbolic OpCode does not take numeric operand";
-				Errors::RecordError(emsg);
-			}
-			//	Operand name is to long
-			if (m_Operand.size() > 10) {
-				string emsg = "Error: Operand name is to long";
-				Errors::RecordError(emsg);
-			}
-			m_type = ST_MachineLanguage; // can probably remove
-		}	
+	}
+
+	//Symbolic Opcodes should not have numeric operands
+	//Applies for both numOfWords == 2 || numOfwords == 3
+	if (m_NumOpCode != 0 && isalpha(m_Operand[0]) == false) {	//	Operand is numeric
+		string emsg = "Error: Symbolic OpCode does not take numeric operand";
+		Errors::RecordError(emsg);
+	}
+	//	Operand name is to long
+	if (m_Operand.size() > 10) {
+		string emsg = "Error: Operand name is to long";
+		Errors::RecordError(emsg);
+	}
+	// Label must start with letter and the remaining may be letters and digits
+	if (isalpha(m_Operand[0]) == false) {
+		string emsg = "Error: Label must start with letter";
+		Errors::RecordError(emsg);
 	}
 }
