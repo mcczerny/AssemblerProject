@@ -4,20 +4,33 @@
 #include "stdafx.h"
 #include "FileAccess.h"
 
+/**/
 /*
+FileAccess::FileAccess() FileAccess::FileAccess()
+
 NAME
 
-FileAccess - Opens the file
+	FileAccess::FileAccess - Opens the file.
 
 SYNOPSIS
 
-FileAccess()
+	FileAccess::FileAccess(int argc, char *argv[]);
+
+		argc	--> the number of strings that make up the command line arguement.
+		argv	--> the array that contains the strings of argc.
 
 DESCRIPTION
 
-The constructor opens uses command line arguement to open file. There should be 2 arguements in order to 
-open the command line arguement. If for whatever reason the file can not open an error message is displayed.
+	The constructor opens uses command line arguement to open file. There should be 2 arguements in
+	order to open the command line arguement. If for whatever reason the file can not open an error
+	message is displayed and the program exits.
+
+RETURNS
+
+	Returns no values.
+
 */
+/**/
 FileAccess::FileAccess(int argc, char *argv[])
 {
 	// Check that there is exactly one run time parameter.
@@ -31,44 +44,62 @@ FileAccess::FileAccess(int argc, char *argv[])
 
 	// If the open failed, report the error and terminate.
 	if (!m_sfile) {
-		cerr << "Source file could not be opened, assembler terminated."
-			<< endl;
+		cerr << "Source file could not be opened, assembler terminated." << endl;
 		exit(1);
 	}
 }
 
+/**/
 /*
+FileAccess::~FileAccess() FileAccess::~FileAccess()
+
 NAME
 
-~FileAccess - Closes the file
+	FileAccess::~FileAccess - Closes the file.
 
 SYNOPSIS
 
-~FileAccess()
+	FileAccess::~FileAccess();
 
 DESCRIPTION
 
-The destructor closes the file "m_sfile"
+	The destructor closes the file m_sfile.
+
+Returns
+
+	Returns no values.
+
 */
+/**/
 FileAccess::~FileAccess()
 {
 	m_sfile.close();
 }
 
+/**/
 /*
+FileAccess::GetNextLine() FileAccess::GetNextLine()
+
 NAME
 
-GetNextLine - Get the next line from the source file.
+	FileAccess::GetNextLine - Get the next line from the source file.
 
 SYNOPSIS
 
-void GetNextLine(string &a_buff)
+	bool FileAccess::GetNextLine(string &a_buff);
+
+		a_buff --> The buffer that the line is put into.
 
 DESCRIPTION
 
-This function will get the next line in the file and put it in "a_buff". If end of file is hit, 
-false is returned and if it successfully gets the next line, true is returned.
+	This function will get the next line in the file and put it in a_buff.
+
+RETURNS
+
+	Returns false if m_sfile is at end of file. Returns true indicating it could get the next line.
+
 */
+/**/
 bool 
 FileAccess::GetNextLine(string &a_buff)
 {
@@ -81,20 +112,28 @@ FileAccess::GetNextLine(string &a_buff)
 	return true;
 }
 
+/**/
 /*
+FileAccess::Rewind() FileAccess::Rewind()
+
 NAME
 
-rewind - Put the file pointer back to the beginning of the file.
+	FileAccess::Rewind - Put the file pointer back to the beginning of the file.
 
 SYNOPSIS
 
-void rewind()
+	void FileAccess::Rewind();
 
 DESCRIPTION
 
-This function will clear the end of file flag and go back to the beginning of the file 
-to be read again in PassII
+	This function will clear the end of file flag and go back to the beginning of the file.
+
+RETURNS
+
+	Returns no values.
+
 */
+/**/
 void 
 FileAccess::rewind()
 {

@@ -1,6 +1,6 @@
 //
 // Class to manage error reporting. Note: all members are static so we can access them anywhere.
-// What other choices do we have to accomplish the same thing?
+// 
 //
 #ifndef _ERRORS_H
 #define _ERRORS_H
@@ -15,10 +15,10 @@ public:
 	// Records an error message.
 	static void RecordError(string &a_emsg);
 
-	// Displays the collected error message.
+	// Displays the collected error messages.
 	static void DisplayErrors();
 
-	// Checks if vector is empty
+	// Checks if vector is empty.
 	static bool IsEmpty();
 
 private:

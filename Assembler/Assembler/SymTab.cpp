@@ -5,20 +5,31 @@
 #include "SymTab.h"
 #include "Errors.h"
 
+/**/
 /*
+SymbolTable::AddSymbol() SymbolTable::AddSymbol()
+
 NAME
 
-AddSymbol - Adds a new symbol to the symbol table.
+	SymbolTable::AddSymbol - Adds a new symbol to the symbol table.
 
 SYNOPSIS
 
-void AddSymbol( char *a_symbol, int a_loc );
+	void SymbolTablle::AddSymbol( char *a_symbol, int a_loc );
+
+		a_symbol --> The symbol to be placed into symbol table.
+		a_loc	 --> The location of the symbol.
 
 DESCRIPTION
 
-This function will place the symbol "a_symbol" and its location "a_loc"
-in the symbol table.
+	This function will place the symbol "a_symbol" and its location "a_loc" in the symbol table.
+
+RETURNS
+
+	Returns no values.
+
 */
+/**/
 void
 SymbolTable::AddSymbol(string &a_symbol, int a_loc)
 {
@@ -29,24 +40,33 @@ SymbolTable::AddSymbol(string &a_symbol, int a_loc)
 		st->second = multiplyDefinedSymbol;
 		return;
 	}
-	// Record a the  location in the symbol table.
+	// Record a the location in the symbol table.
 	m_symbolTable[a_symbol] = a_loc;
 }
 
+/**/
 /*
+SymbolTable::DisplaySymbolTable() SymbolTable::DisplaySymbolTable()
+
 NAME
 
-DisplaySymbolTable - Displays the symbol table
+	SymbolTable::DisplaySymbolTable - Displays the symbol table.
 
 SYNOPSIS
 
-void DisplaySymbolTable();
+	void SymbolTable::DisplaySymbolTable();
 
 DESCRIPTION
 
-This function will use the iterator it, to go through map and output 
-each symbol with it's corresponding location in the symbol table.
+	This function will use the iterator it, to go through map and output each symbol with it's
+	corresponding location in the symbol table.
+
+RETURNS
+
+	Returns no values.
+
 */
+/**/
 void
 SymbolTable::DisplaySymbolTable()
 {
@@ -58,21 +78,32 @@ SymbolTable::DisplaySymbolTable()
 	}
 }
 
+/**/
 /*
+SymbolTable::LookupSymbol() SymbolTable::LookupSymbol()
+
 NAME
 
-LookupSymbol - Looks for symbol in symbal table. 
+	SymbolTable::LookupSymbol - Looks for symbol in symbol table. 
 
 SYNOPSIS
 
-bool LookupSymbol( char *a_symbol, int a_loc );
+	bool LookupSymbol( char *a_symbol, int a_loc );
+
+		a_symbol --> The symbol to be looked up.
+		a_loc	 --> The location of the symbol.
 
 DESCRIPTION
 
-This function will search for symbol in symbol table and replace the symbol "a_symbol" and
-its location "a_loc" with the found values in the symbol table. If it can find in symbol 
-table then then function returns true.
+	This function will search for symbol in symbol table and replace the symbol a_symbol and its
+	location a_loc with the found values in the symbol table. 
+
+RETURNS
+
+	Returns no values.
+
 */
+/**/
 bool
 SymbolTable::LookupSymbol(string &a_symbol, int &a_loc)
 {

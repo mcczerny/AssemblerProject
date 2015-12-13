@@ -1,5 +1,5 @@
 //
-//		Emulator class - supports the emulation of VC3600 programs
+//		Emulator class - Supports the emulation of VC3600 programs.
 //
 #ifndef _EMULATOR_H      // UNIX way of preventing multiple inclusions.
 #define _EMULATOR_H
@@ -10,7 +10,7 @@ public:
 
 	const static int MEMSZ = 10000;	// The size of the memory of the VC3600.
 	
-	// Constructor for the emulator
+	// Constructor for the emulator.
 	Emulator(); 
 
 	// Records instructions and data into VC3600 memory.

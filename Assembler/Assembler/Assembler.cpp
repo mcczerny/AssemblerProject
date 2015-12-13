@@ -11,7 +11,7 @@ Assembler::Assembler() Assembler::Assembler()
 
 NAME
 
-	Assembler::Assembler - Constructor for the assembler
+	Assembler::Assembler - Constructor for the assembler.
 
 SYNOPSIS
 	
@@ -22,8 +22,8 @@ SYNOPSIS
 
 DESCRIPTION
 	
-	This function will pass argc and argv which are command line arguements,to the
-	file access constructor. 
+	This function will pass argc and argv which are command line arguements, to the file access
+	constructor. 
 
 RETURNS
 	
@@ -51,13 +51,11 @@ SYNOPSIS
 
 DESCRIPTION
 
-	This function will establish the location of the symbols and add them to symbol
-	table. In order to do this, a line is read from the file and put into "buff".
-	The line is then parsed using the object ParseInstruction from the object m_inst.
-	It returns the InstructionType and also determines if the instruction contains a
-	label. Every line is read from the file and every label found is added to the 
-	symbol table. The symbol and the location of it is added to the symbol table. The 
-	next location is found using the m_inst object's function LocationNextInstruction.
+	This function will establish the location of the symbols and add them to symbol table. In order
+	to do this, a line is read from the file and put into buff. The line is then parsed using using
+	the object m_inst to parse the instruction. Every line is read from the file and every label
+	found is added to the symbol table. The symbol and the location of it is added to the symbol 
+	table. The next location is found using the function LocationNextInstruction from m_inst.
 
 RETURNS
 
@@ -68,11 +66,10 @@ RETURNS
 void 
 Assembler::PassI()
 {
-	int loc = 0;        // Tracks the location of the instructions to be generated.
+	int loc = 0;	// Tracks the location of the instructions to be generated.
 
-						// Successively process each line of source code.
+	// Successively process each line of source code.
 	for (; ; ) {
-
 		// Read the next line from the source file.
 		string buff;
 		if (!m_facc.GetNextLine(buff)) { return; }
@@ -81,17 +78,13 @@ Assembler::PassI()
 		Instruction::InstructionType st = m_inst.ParseInstruction(buff);
 
 		// If this is an end statement, there is nothing left to do in pass I.
-		// Pass II will determine if the end is the last statement.
 		if (st == Instruction::ST_End) { return; }
 
-		// Labels can only be on machine language and assembler language
-		// instructions.
+		// Labels can only be on machine language and assembler language instructions.
 		if (st != Instruction::ST_MachineLanguage && st != Instruction::ST_AssemblerInstr) continue;
 
-		// If the instruction has a label, record it and its location in the
-		// symbol table.
+		// If the instruction has a label, record it and its location in the symbol table.
 		if (m_inst.isLabel()) {
-
 			m_symtab.AddSymbol(m_inst.GetLabel(), loc);
 		}
 		// Compute the location of the next instruction.
@@ -105,7 +98,7 @@ Assembler::DisplaySymbolTable() Assembler::DisplaySymbolTable()
 
 NAME
 
-	Assembler::DisplaySymbolTable - Displays the symbols in the symbol table
+	Assembler::DisplaySymbolTable - Displays the symbols in the symbol table.
 
 SYNOPSIS
 
@@ -113,10 +106,9 @@ SYNOPSIS
 
 DESCRIPTION
 
-	This function will first output the fact that it will be displaying the symbol 
-	table. It will create the column layout to make output look like a table. Then
-	it will output the symbol table using the function DisplaySymbolTable using the
-	object m_symtab.
+	This function will first output the fact that it will be displaying the symbol table. It will
+	create the column layout to make output look like a table. Then it will output the symbol table
+	using the function DisplaySymbolTable using the object m_symtab.
 
 RETURNS
 
@@ -128,11 +120,12 @@ void
 Assembler::DisplaySymbolTable()
 {
 	cout << "Symbol Table:" << endl;
-	cout << setw(12) << left << "Symbol#" << setw(12) << left << "Symbol" << setw(12) << left << "Location" << endl;
-	m_symtab.DisplaySymbolTable();
+	cout << setw(12) << left << "Symbol#" << setw(12) << left << "Symbol" 
+		 << setw(12) << left << "Location" << endl;
+
+	m_symtab.DisplaySymbolTable(); // Displays Symbol Table.
 
 	cout << "----------------------------------\n\n" << endl;
-
 }
 
 /**/
@@ -141,7 +134,7 @@ Assembler::PassII() Assembler::PassII()
 
 NAME
 
-	Assembler::PassII - Generate a translation
+	Assembler::PassII - Generate a translation.
 
 SYNOPSIS
 
@@ -149,20 +142,18 @@ SYNOPSIS
 
 DESCRIPTION
 
-	This function first goes back to the beginning of file using the function rewind
-	from the object m_facc. It next uses Errors::InitErrorReporting to clear errors 
-	recorded from PassI. The function next goes through the file line by line parsing
-	the instruction using ParseInstruction from the object m_inst. Any line with the
-	InstructionType of machine or assembly language is translated and outputed using
-	the DisplayTranslation function from the object m_trans. 
+	This function first goes back to the beginning of file using the function rewind from the 
+	object m_facc. It next uses Errors::InitErrorReporting to clear errors recorded from PassI. The
+	function next parses each line by using ParseInstruction from the object m_inst. Any line with
+	the InstructionType of machine or assembly language is translated and outputed using the 
+	DisplayTranslation function from the object m_trans. 
 	
-	Once the line has been translated and output, PassII next determines if the
-	translated line needs it's "contents" to be inserted into memory of the emulator. 
-	PassII then sets loc using  m_inst's LocationNextInstruction.
+	Once the line has been translated and output, PassII next determines if the translated line 
+	needs it's "contents" to be inserted into memory of the emulator. PassII then sets loc using
+	the function LocationNextInstruction from m_inst.
 	
-	The function also does error checking such as checking if end was called and where 
-	in the file it was called. It also makes sure there is enough memory to keep 
-	translating the file.
+	The function also does error checking such as checking if end was called and where in the file it
+	was called. It also makes sure there is enough memory to keep translating the file.
 
 RETURNS
 
@@ -174,11 +165,12 @@ void
 Assembler::PassII()
 {
 	int loc = 0;        // Tracks the location of the instructions to be generated.
-	m_facc.rewind();	// Goes baack to beginning of file
-	Errors::InitErrorReporting(); // Clears any errors from PassI
+	m_facc.rewind();	// Goes back to beginning of file.
+	Errors::InitErrorReporting(); // Clears any errors from PassI.
 
 	cout << "\nTranslation of Program:\n" << endl;
-	cout << setw(12) << left << "Location" << setw(12) << left << "Contents" << setw(12) << left << "Original Statement" << endl;
+	cout << setw(12) << left << "Location" << setw(12) << left << "Contents" 
+		 << setw(12) << left << "Original Statement" << endl;
 
 	// Successively process each line of source code.
 	for (; ; ) {
@@ -186,12 +178,12 @@ Assembler::PassII()
 		// Read the next line from the source file.
 		string buff;
 
-		if (!m_facc.GetNextLine(buff)) {
-			// End is at end of file
+		if (!m_facc.GetNextLine(buff)) {	
+			// End is at end of file.
 			if (m_inst.GetOpCode() == "END") {
 				return;
 			}
-			// Missing end at end of file
+			// Missing end at end of file.
 			else {	
 				string emsg = "Error: Missing an end statement";
 				Errors::RecordError(emsg);
@@ -202,14 +194,13 @@ Assembler::PassII()
 		// Parse the line and get the instruction type.
 		Instruction::InstructionType st = m_inst.ParseInstruction(buff);
 
-
 		if (st == Instruction::ST_End) { 
-			// END called at end of file
+			// End called at end of file.
 			if (!m_facc.GetNextLine(buff)) {
 				cout << "                        " << m_inst.GetOriginalInstruction() << endl;
 				return;
 			}
-			// END called before end of file 
+			// End called before end of file.
 			else { 
 				string emsg = "Error: End is not at end of file";
 				Errors::RecordError(emsg);
@@ -217,26 +208,26 @@ Assembler::PassII()
 			}
 		}
 	
-		//	Outputs translation if comment
+		//	Outputs translation if comment.
 		if (st == Instruction::ST_Comment) { cout << "                        " << m_inst.GetOriginalInstruction() << endl; }
 
 		// Labels can only be on machine language and assembler language instructions.
 		if (st != Instruction::ST_MachineLanguage && st != Instruction::ST_AssemblerInstr) continue;
 
-		// Outputs translation of machine and assembly language
+		// Outputs translation of machine and assembly language.
 		m_trans.DisplayTranslation(st, m_inst, m_symtab, loc);
 
-		//	Insert DC assembly instruction into memory
-		//	DC is the only assembly instruction put into memory
+		//	Insert DC assembly instruction into memory.
+		//	DC is the only assembly instruction put into memory.
 		if (m_inst.GetOpCode() == "DC") {
-			int contents = stoi(m_trans.getStrContents()); // Used to store int version of contents
-			m_emul.InsertMemory(loc, contents); // Inserts into memory
+			int contents = stoi(m_trans.getStrContents()); // Used to store int version of contents.
+			m_emul.InsertMemory(loc, contents); // Inserts into memory.
 		}
 
-		//	Insert machine language into memory 
+		//	Insert machine language into memory.
 		if (st == Instruction::ST_MachineLanguage) {
-			int contents = stoi(m_trans.getStrContents());
-			m_emul.InsertMemory(loc, contents); // Inserts into memory
+			int contents = stoi(m_trans.getStrContents()); // Used to store int version of contents.
+			m_emul.InsertMemory(loc, contents); // Inserts into memory.
 		}
 
 		//	Compute the location of the next instruction.
@@ -256,7 +247,7 @@ Assembler::RunEmulator() Assembler::RunEmulator()
 
 NAME
 
-	Assembler::RunEmulator - Runs the emulator on the translation
+	Assembler::RunEmulator - Runs the emulator on the translation.
 
 SYNOPSIS
 
@@ -277,14 +268,16 @@ Returns
 */
 /**/
 void 
-Assembler::RunEmulator() { 
-	
+Assembler::RunEmulator() 
+{ 	
+	// No errors so emulator will run.
 	if (Errors::IsEmpty()) {
 		cout << "Results from emulating program: \n" << endl;
 		m_emul.RunProgram();
 		cout << "\nEnd of emulation" << endl;
 	}
-	else {
+	// Errors found so emulator will not run.
+	else {	
 		cout << "\n";
 		Errors::DisplayErrors();
 	}

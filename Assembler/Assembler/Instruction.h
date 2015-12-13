@@ -1,4 +1,3 @@
-#pragma once
 //
 // Class to parse and provide information about instructions
 //
@@ -41,26 +40,29 @@ public:
 InstructionType 
 ParseInstruction(string &a_buff);
 
-//Compute the location of the next instruction
+// Compute the location of the next instruction.
 int 
 LocationNextInstruction(int a_loc);
 
-// To set number of OpCode
+// To set number of OpCode.
 void
 SetNumOpCode();
 
+// Clears the private members of instruction.
+void 
+InitializeValues();
+
+// Does error checking for the label.
 void
 CheckLabel(int a_numOfWords);
 
+// Does error checking for the OpCode.
 void
 CheckOpCode(int a_numOfWords);
 
+// Does error checking for the operand.
 void
 CheckOperand(int a_numOfWords);
-
-//Clears the private members of instruction
-void 
-InitializeValues();
 
 // To access the label
 inline string &

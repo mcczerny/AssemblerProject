@@ -8,58 +8,85 @@
 // Initializes Vector
 vector <string> Errors::m_ErrorMsgs;
 
+/**/
 /*
+Errors::InitErrorReporting() Errors::InitErrorReporting()
+
 NAME
 
-InitErrorReporting - Initializes error report
+	Errors::InitErrorReporting - Initializes error reports.
 
 SYNOPSIS
 
-void InitErrorReporting()
+	void Errors::InitErrorReporting();
 
 DESCRIPTION
 
-This function will clear the vector that holds the error messages so it will be empty at the 
-beginning of PassII
+	This function will clear the vector that holds the error messages.
+
+RETURNS
+
+	Returns no values.
+
 */
+/**/
 void 
 Errors::InitErrorReporting() 
 {
 	Errors::m_ErrorMsgs.clear();
 }
 
+/**/
 /*
+Errors::RecordError() Errors::RecordError()
+
 NAME
 
-RecordError - Records an error message
+	Errors::RecordError - Records an error message.
 
 SYNOPSIS
 
-void RecordError(string &a_emsg)
+	void Errors::RecordError(string &a_emsg);
+
+		a_emsg ->> The message to be recorded into m_ErrorMsgs.
 
 DESCRIPTION
 
-This function will push "a_emsg" to the vector "m_ErrorMsgs".
+	This function will push a_emsg to the vector m_ErrorMsgs.
+
+RETURNS
+
+	Returns no values.
 */
+/**/
 void 
 Errors::RecordError(string &a_emsg)
 {
 	Errors::m_ErrorMsgs.push_back(a_emsg);
 }
 
+/**/
 /*
+Errors::DisplayErrors() Errors::DisplayErrors()
+
 NAME
 
-DisplayErrors - Displays the collected error message
+	DisplayErrors - Displays the collected error messages.
 
 SYNOPSIS
 
-void DisplayErrors()
+	void Errors::DisplayErrors();
 
 DESCRIPTION
 
-This function will push "a_emsg" to the vector "m_ErrorMsgs".
+	This function will output the error messages stored in m_ErrorMsgs.
+
+RETURNS
+
+	Returns no values.
+
 */
+/**/
 void 
 Errors::DisplayErrors() 
 {
@@ -68,19 +95,28 @@ Errors::DisplayErrors()
 		}
 }
 
+/**/
 /*
+Errors::IsEmpty() Errors::IsEmpty()
+
 NAME
 
-IsEmpty - Checks if vector is empty
+	Errors::IsEmpty - Checks if vector is empty.
 
 SYNOPSIS
 
-IsEmpty() 
+	bool Errors::IsEmpty();
 
 DESCRIPTION
 
-This function will determine if there are any error messages in the vector "m_ErrorMsgs"
+	This function will determine if the vector is empty.
+
+RETURNS
+
+	Returns true if the vector is empty and false if the vector is not empty.
+
 */
+/**/
 bool 
 Errors::IsEmpty()
 {
