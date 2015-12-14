@@ -114,6 +114,11 @@ Emulator::RunProgram()
 				return false;
 			}
 
+			// If number is to big to fit into memory
+			if (ACC > 999999) {
+				ACC = ACC % 1000000; 
+			}
+
 			switch (opCode) {
 			default:
 				cout << "Error: Illegal OpCode" << endl;
