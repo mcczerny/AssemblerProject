@@ -123,7 +123,8 @@ Assembler::DisplaySymbolTable()
 	cout << setw(12) << left << "Symbol#" << setw(12) << left << "Symbol" 
 		 << setw(12) << left << "Location" << endl;
 
-	m_symtab.DisplaySymbolTable(); // Displays Symbol Table.
+	// Displays Symbol Table.
+	m_symtab.DisplaySymbolTable(); 
 
 	cout << "----------------------------------\n\n" << endl;
 }
@@ -164,8 +165,8 @@ RETURNS
 void 
 Assembler::PassII()
 {
-	int loc = 0;        // Tracks the location of the instructions to be generated.
-	m_facc.rewind();	// Goes back to beginning of file.
+	int loc = 0;				  // Tracks the location of the instructions to be generated.
+	m_facc.rewind();	          // Goes back to beginning of file.
 	Errors::InitErrorReporting(); // Clears any errors from PassI.
 
 	cout << "\nTranslation of Program:\n" << endl;
@@ -177,12 +178,10 @@ Assembler::PassII()
 
 		// Read the next line from the source file.
 		string buff;
-
 		if (!m_facc.GetNextLine(buff)) {	
 			// End is at end of file.
-			if (m_inst.GetOpCode() == "END") {
-				return;
-			}
+			if (m_inst.GetOpCode() == "END") { return; }
+
 			// Missing end at end of file.
 			else {	
 				string emsg = "Error: Missing an end statement";
@@ -221,13 +220,13 @@ Assembler::PassII()
 		//	DC is the only assembly instruction put into memory.
 		if (m_inst.GetOpCode() == "DC") {
 			int contents = stoi(m_trans.getStrContents()); // Used to store int version of contents.
-			m_emul.InsertMemory(loc, contents); // Inserts into memory.
+			m_emul.InsertMemory(loc, contents);			   // Inserts into memory.
 		}
 
 		//	Insert machine language into memory.
 		if (st == Instruction::ST_MachineLanguage) {
 			int contents = stoi(m_trans.getStrContents()); // Used to store int version of contents.
-			m_emul.InsertMemory(loc, contents); // Inserts into memory.
+			m_emul.InsertMemory(loc, contents);            // Inserts into memory.
 		}
 
 		//	Compute the location of the next instruction.
@@ -272,11 +271,11 @@ Assembler::RunEmulator()
 { 	
 	// No errors so emulator will run.
 	if (Errors::IsEmpty()) {
-		cout << "Results from emulating program: \n" << endl;
+		cout << "\nResults from emulating program: \n" << endl;
 		m_emul.RunProgram();
 		cout << "\nEnd of emulation" << endl;
 	}
-	// Errors found so emulator will not run.
+	// Errors found so emulator will not run. Will display errors.
 	else {	
 		cout << "\n";
 		Errors::DisplayErrors();

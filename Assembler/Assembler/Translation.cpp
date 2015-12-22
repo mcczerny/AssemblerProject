@@ -37,7 +37,8 @@ RETURNS
 	Returns no values.
 */
 /**/
-void Translation::DisplayTranslation(Instruction::InstructionType a_st, Instruction a_inst, SymbolTable a_symtab, int a_loc) {
+void 
+Translation::DisplayTranslation(Instruction::InstructionType a_st, Instruction a_inst, SymbolTable a_symtab, int a_loc) {
 
 	ostringstream intToString;	// Used to resize contents to 6 bits.
 
@@ -110,9 +111,9 @@ void Translation::DisplayTranslation(Instruction::InstructionType a_st, Instruct
 			
 			if(a_symtab.LookupSymbol(a_inst.GetOperand(), pointerLoc) == true)
 			{
-				// If OpCode is only 1 char a 0 is added to front
+				// If OpCode is only 1 char a 0 is added to front.
 				if (m_strContents.size() == 1) { m_strContents.insert(0, "0"); }	
-				intToString.str("");	// Clear stringstream for use again
+				intToString.str("");	// Clear stringstream for use again.
 				intToString << pointerLoc;
 				m_strContents = m_strContents + intToString.str();
 

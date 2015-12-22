@@ -11,13 +11,13 @@ int main(int argc, char *argv[])
 {
 	Assembler assem(argc, argv);
 
-	// Establish the location of the labels:
+	// Establish the location of the labels.
 	assem.PassI();
 
 	// Display the symbol table.
 	assem.DisplaySymbolTable();
 
-	// Translate .
+	// Translate.
 	assem.PassII();
 
 	// Run the emulator on the VC3600 program that came from the translation.

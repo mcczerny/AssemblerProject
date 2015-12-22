@@ -62,6 +62,7 @@ RETURNS
 bool 
 Emulator::InsertMemory(int a_location, int a_contents)
 {
+	// VC3600 does not have more than 10000 memory locations. Cannot insert.
 	if (a_location > 9999) {
 		return false;
 	}
